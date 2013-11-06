@@ -7,11 +7,11 @@ DataParser::DataParser(std::string DataPath)
 {
 	_songsAmount = 0;
 	_SoundVector.clear();
+
 	printf("DataParser: DataPath: %s \n", DataPath.c_str());
 	PathName = DataPath;
     
 	StartParsing();
-	//printf("Press Any Button To Start Playing...\n");
 }
 
 

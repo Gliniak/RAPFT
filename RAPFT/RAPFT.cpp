@@ -12,7 +12,8 @@ unsigned int CalculateTimeToHalfHour()
 	time_t at = time(NULL);
 	struct tm *actualTime;
 	actualTime=localtime((const time_t*)&at);
-	return ((actualTime->tm_min - 30) >= 0) ? (60 - abs(actualTime->tm_min - 30)) : abs(actualTime->tm_min - 30);
+	unsigned int calculated = ((actualTime->tm_min - 30) >= 0) ? (60 - abs(actualTime->tm_min - 30)) : abs(actualTime->tm_min - 30);
+	return at + calculated*60-actualTime->tm_sec;
 }
 
 //It's Going To Be Useful Soon
@@ -27,34 +28,42 @@ std::string ExePath()
 int main(int argc, char* argv[])
 {
 	std::string DataFileName = "data.bps";
+	int TimeInterval = -1;
 
 	for(unsigned int i = 0; i < argc; i++)
 	{
 		if((strcmp(argv[i], "-?") == 0) || (strcmp(argv[i], "/?") == 0))
 		{
-			printf("Some Kinda Help \n");
+			printf("------------- HELP -------------\n");
+			printf("'-f' - Read Theme Data Based On File (it's still have to be in directory with application!\n");
+			printf("'-t' - Time in seconds till next play\n");
+			printf("------------- HELP -------------\n");
 			system("pause");
 			return 0;
 		}
 
 		if(strcmp(argv[i], "-f") == 0)
 			DataFileName = argv[i+1];
+
+		if(strcmp(argv[i], "-t") == 0)
+			TimeInterval = atoi(argv[i+1]);
 	}
 
 	DataParser* datas = new DataParser(DataFileName);
 	
-	
+	unsigned int _TTP = TimeInterval > 0 ? (time(NULL) + TimeInterval) : CalculateTimeToHalfHour();
+
 	while(1)
 	{
-		int TimeToBoom = CalculateTimeToHalfHour();
-		printf("Time In Minutes to Next HalfHour: %i \n", TimeToBoom);
+		unsigned int _STTP = abs(difftime(_TTP, time(NULL)));
+		printf("REMAIN TIME: %i SECONDS \n", _STTP);
 
-		if(TimeToBoom == 60)
+		if(_STTP <= 0)
 		{
 			datas->StartPlaying();
-			Sleep(1000*TimeToBoom-10*60*1000);
-		}else Sleep(15000);
-		
+			_TTP = TimeInterval > 0 ? (time(NULL) + TimeInterval) : CalculateTimeToHalfHour();
+		}
+		else Sleep(1000);
 	}
 	return 0;
 }

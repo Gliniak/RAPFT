@@ -27,7 +27,7 @@ class BeeperData
 	}
 
 private:
-	int _BeepsAmount;
+	unsigned int _BeepsAmount;
 	std::vector<short> _freq;
 	std::vector<short> _mstime;
 	std::vector<short> _mstimeout;

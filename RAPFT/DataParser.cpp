@@ -96,8 +96,6 @@ void DataParser::StartParsing()
 			if((line.find_last_of(',') == pos) && (line.find_first_of(';') == line.size()-1))
 				data[itr++] = atoi(line.substr(begin, line.size()-begin).c_str());
 		}
-		//printf("Collected Data: 0:%i 1:%i 2:%i \n", data[0], data[1], data[2]);
-
 		freq.push_back(data[0]);
 		mstime.push_back(data[1]);
 		mstimeout.push_back(data[2]);

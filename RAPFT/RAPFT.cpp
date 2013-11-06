@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 	std::string DataFileName = "data.bps";
 	int TimeInterval = -1;
 
-	for(unsigned int i = 0; i < argc; i++)
+	for(int i = 0; i < argc; i++)
 	{
 		if((strcmp(argv[i], "-?") == 0) || (strcmp(argv[i], "/?") == 0))
 		{
@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
 
 	while(1)
 	{
-		unsigned int _STTP = abs(difftime(_TTP, time(NULL)));
+		int _STTP = floor(difftime(_TTP, time(NULL)));
 		printf("REMAIN TIME: %i SECONDS \n", _STTP);
 
 		if(_STTP <= 0)

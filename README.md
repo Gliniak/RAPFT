@@ -2,14 +2,25 @@ RAPFT
 =====
 
 RAPFT is an acronym of "Really Annoying Program For Teachers". 
-I'm doing this just for fun! (PS. Actually it's nothing there, just go away)
+I'm doing this just for fun!
 
-What this going to do
- - Play Sounds from internal PC beeper, It's going to gain data from external files with info about sound
- - It's going to be fully hidden from system (maybe even from Task Manager)
- - Have to play randed theme each somekinda interval
- - Autostart, Typical :P
+Description:
+This Application Is Just Going To Play Some Themes On PC Internal Beeper Or Other Device That Can Play Sounds.
+You Can Create Your Own Themes In Files.
 
- - ... Many other features that I still don't know
- 
- I will update this file as soon as possible, because actually it's really unreadable :D
+Example File Structure (From: 06.11.2013):
+#<TrackID>
+<SoundFrequency>,<SoundPlayTime>,<TimeToNextSound>;
+
+You Can Also Look At data.bps File For More Examples!
+
+Work Progress:
+ - Primary:
+   - Playing Sounds From Internal Beeper Or Other Sound Device - 100%
+   - Parsing Sound Data From External Files - 40%
+   - Custom Time Intervals - 85%
+   
+ - Secondary
+   - I'm Feel Like A Ninja - 0%
+   - AutoStart - 0%
+ - ... Many Other Features That I Still Don't Know

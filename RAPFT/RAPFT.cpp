@@ -35,8 +35,11 @@ int main(int argc, char* argv[])
 		if((strcmp(argv[i], "-?") == 0) || (strcmp(argv[i], "/?") == 0))
 		{
 			printf("------------- HELP -------------\n");
-			printf("'-f' - Read Theme Data Based On File (it's still have to be in directory with application!\n");
+			printf("'-f' - Read Theme Data Based On File\n");
 			printf("'-t' - Time in seconds till next play\n");
+			printf("'-a' - Add Application To Autostart (UNIMPLEMENTED) \n");
+			printf("'-c' - Create Copy Of Application And Run It (UNIMPLEMENTED) \n");
+			printf("'-p' - DO YOU WANT TO PLAY A GAME?! \n");
 			printf("------------- HELP -------------\n");
 			system("pause");
 			return 0;

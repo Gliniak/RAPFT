@@ -5,7 +5,7 @@
 class BeeperData
 {
 	public:
-	BeeperData(std::vector<short> freq, std::vector<short> time, std::vector<short> timeout, int _BeepsAmount, short _position);
+	BeeperData(std::string theme, std::vector<short> freq, std::vector<short> time, std::vector<short> timeout, int _BeepsAmount, short _position);
 	~BeeperData();
 	void play();
 	unsigned int GetPlayTime() const
@@ -27,6 +27,7 @@ class BeeperData
 	}
 
 private:
+	std::string _ThemeName;
 	unsigned int _BeepsAmount;
 	std::vector<short> _freq;
 	std::vector<short> _mstime;

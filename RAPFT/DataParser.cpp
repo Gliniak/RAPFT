@@ -62,7 +62,7 @@ void DataParser::StartParsing()
 			if(line.find("#") != -1)
 				printf("Founded New Track (Track: #%s)\n", line.substr(line.find("#")+1, line.length()).c_str());
 
-			_SoundVector.push_back(new BeeperData(freq, mstime, mstimeout, _beepAmount, _songsAmount));
+			_SoundVector.push_back(new BeeperData(PathName.c_str(), freq, mstime, mstimeout, _beepAmount, _songsAmount));
 			_songsAmount++;
 			_beepAmount = 0;
 			if(line.find("----") != -1)

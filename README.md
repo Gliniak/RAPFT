@@ -24,4 +24,5 @@ Work Progress:
    - I'm Feel Like A Ninja - 30%
    - AutoStart - 90%
    - Sharing via Local Workgroup & Autorun - 0% (Need To use Exploit?/Impossibru?)
+   - Unicode Support - 0%
  - ... Many Other Features That I Still Don't Know

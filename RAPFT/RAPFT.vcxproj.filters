@@ -30,6 +30,9 @@
     <ClInclude Include="DataParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RAPFT.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

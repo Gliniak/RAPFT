@@ -1,9 +1,9 @@
+#pragma once
 #include <string>
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include "BeeperData.h"
-#pragma once
 
 class DataParser
 {

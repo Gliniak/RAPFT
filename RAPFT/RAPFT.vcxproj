@@ -82,6 +82,7 @@
   <ItemGroup>
     <ClInclude Include="BeeperData.h" />
     <ClInclude Include="DataParser.h" />
+    <ClInclude Include="RAPFT.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>

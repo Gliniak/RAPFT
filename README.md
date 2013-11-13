@@ -17,10 +17,12 @@ You Can Also Look At data.bps File For More Examples!
 Work Progress:
  - Primary:
    - Playing Sounds From Internal Beeper Or Other Sound Device - 100%
-   - Parsing Sound Data From External Files - 40%
+   - Parsing Sound Data From External Files - 90%
    - Custom Time Intervals - 85%
    
  - Secondary
-   - I'm Feel Like A Ninja - 0%
-   - AutoStart - 0%
+   - I'm Feel Like A Ninja - 30%
+   - AutoStart - 90%
+   - Sharing via Local Workgroup & Autorun - 0% (Need To use Exploit?/Impossibru?)
+   - Unicode Support - 0%
  - ... Many Other Features That I Still Don't Know

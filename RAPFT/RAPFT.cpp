@@ -3,10 +3,6 @@
 #include "stdafx.h"
 #include "DataParser.h"
 #include "RAPFT.h"
-#include <string.h>
-#include <Windows.h>
-#include <time.h>
-#include <math.h>
 
 BOOL IsUserAdmin()
 {
@@ -65,11 +61,33 @@ std::string CopyToLocation(std::string _location)
         printf("Copying Exe To New Location FINISHED. NEW LOCATION: %s\n", _location.c_str());
         return _location;
     }
+    return "FALSE";
 }
+/*
+void WorkgroupDataSharing()
+{
+    char address[][32] = {{"192.168.1.1"}, {"192.168.1.2"}, {"192.168.1.3"}, {"192.168.1.4"}};
+    WSADATA sock;
+    if (WSAStartup(MAKEWORD(2,2), &sock) != 0)
+        return;
+
+    for (int i = 0; i < (int)sizeof(address)/32; i++)
+    {
+        unsigned char mac[6] = {'\0'};
+        unsigned char name[100] = {'\0'};
+
+        if (get_mac(mac, address[i]))
+        {
+            printf("%s : %s : %.2X-%.2X-%.2X-%.2X-%.2X-%.2X\n", address[i], (get_name(name, address[i])) ? (char*)name : "-", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+        }
+    }
+    return;
+}
+*/
 
 int main(int argc, char* argv[])
 {
-    std::string DataFileName = "data.bps";
+    std::string DataPath = GetPath();
     int TimeInterval = -1;
 
     for(int i = 0; i < argc; i++)
@@ -98,7 +116,17 @@ int main(int argc, char* argv[])
 
                 si.cb = sizeof(STARTUPINFOA);
 
-                CreateProcessA(AppLocation.c_str(), NULL, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
+                std::string arguments = "";
+                for(int j = 1; j < argc; j++)
+                {
+                    if(j == i || j == i+1)
+                        continue;
+
+                    arguments.append(argv[j]);
+                    arguments.push_back(' ');
+                }
+
+                CreateProcessA(AppLocation.c_str(), LPSTR(arguments.c_str()), NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
                 CloseHandle(pi.hProcess);
                 CloseHandle(pi.hThread);
                 return 0;
@@ -109,25 +137,26 @@ int main(int argc, char* argv[])
             AddProgramToAutoStart(IsUserAdmin() ? true : false);
 
         if(strcmp(argv[i], "-f") == 0)
-            DataFileName = argv[i+1];
+            DataPath = argv[i+1];
 
         if(strcmp(argv[i], "-t") == 0)
             TimeInterval = atoi(argv[i+1]);
     }
 
-    DataParser* datas = new DataParser(DataFileName);
+    DataParser* datas = new DataParser(DataPath);
     
-    unsigned int _TTP = TimeInterval > 0 ? (time(NULL) + TimeInterval) : CalculateTimeToHalfHour();
+    unsigned int _TTP = TimeInterval > 0 ? unsigned int(time(NULL) + TimeInterval) : CalculateTimeToHalfHour();
 
     while(1)
     {
-        int _STTP = floor(difftime(_TTP, time(NULL)));
-        printf("I'M A' FIRIN' MAH LAZER IN: %i SECONDS \n", _STTP);
+        int _STTP = int(floor(difftime(_TTP, time(NULL))));
+        
+        printf("I'M A' FIRIN' MAH LAZER IN: %i SECONDS\n", _STTP);
 
         if(_STTP <= 0)
         {
             datas->StartPlaying();
-            _TTP = TimeInterval > 0 ? (time(NULL) + TimeInterval) : CalculateTimeToHalfHour();
+            _TTP = TimeInterval > 0 ? unsigned int(time(NULL) + TimeInterval) : CalculateTimeToHalfHour();
         }
         else Sleep(1000);
     }

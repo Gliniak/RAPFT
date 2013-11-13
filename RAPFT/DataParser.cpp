@@ -24,11 +24,16 @@ void DataParser::StartParsing()
     DIR* dir;
     struct dirent *ent;
 
-    if ((dir = opendir (GetPath().c_str())) != NULL) 
+    if ((dir = opendir (strcmp(PathName.c_str(), GetPath().c_str()) != 0 ? PathName.c_str() : GetPath().c_str())) != NULL) 
     {
         while ((ent = readdir (dir)) != NULL)
         {
-            if(std::string(ent->d_name).substr(std::string(ent->d_name).find_last_of("."), ent->d_namlen) != ".bps")
+            int pos = std::string(ent->d_name).find_last_of('.');
+
+            if(pos == -1) // Only For Directories and Files Without dot
+                continue;
+
+            if(std::string(ent->d_name).substr(pos, ent->d_namlen - pos) != ".bps")
                 continue;
 
             std::ifstream _dataFile(ent->d_name);

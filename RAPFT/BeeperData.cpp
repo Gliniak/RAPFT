@@ -2,7 +2,7 @@
 #include "BeeperData.h"
 #include <Windows.h>
 
-BeeperData::BeeperData(std::string name, std::vector<short> freq, std::vector<short> time, std::vector<short> timeout, int BeepsAmount, short _position)
+BeeperData::BeeperData(std::wstring name, std::vector<short> freq, std::vector<short> time, std::vector<short> timeout, int BeepsAmount, short _position)
 {
     _freq = freq;
     _mstime = time;
@@ -11,7 +11,7 @@ BeeperData::BeeperData(std::string name, std::vector<short> freq, std::vector<sh
     _BeepsAmount = BeepsAmount;
     printf("--------------- THEME #%u SUMMARY --------------------\n", _position+1);
     printf("---- Theme Number: %u\n", _position+1);
-    printf("---- Theme Name: %s\n", name.c_str());
+    wprintf(L"---- Theme Name: %ws\n", name.c_str());
     printf("---- Amount of Sound Calls: %u\n", BeepsAmount);
     printf("---- Play Time: %u\n", GetPlayTime()+GetStopsTime());
     printf("--------------- END OF SUMMARY ----------------------- \n\n");

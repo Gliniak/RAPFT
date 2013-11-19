@@ -8,14 +8,14 @@
 class DataParser
 {
 	public:
-		DataParser(std::string);
+		DataParser(std::wstring);
 		~DataParser();
 
 		void StartParsing();
 		void StartPlaying();
 
 	private:
-		std::string PathName;
+		std::wstring PathName;
 		short _songsAmount;
 		std::vector<BeeperData*> _SoundVector;
 };

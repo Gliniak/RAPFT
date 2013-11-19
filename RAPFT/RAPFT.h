@@ -8,6 +8,7 @@
 #include <winsock2.h>
 #include <iphlpapi.h>
 #include <Windows.h>
+#include <locale>
 
 #pragma comment(lib, "iphlpapi.lib")
 #pragma comment(lib, "ws2_32.lib")
@@ -21,23 +22,23 @@ static unsigned int CalculateTimeToHalfHour()
     return unsigned int(at + calculated*60-actualTime->tm_sec);
 }
 
-static std::string GetPath() 
+static std::wstring GetPath() 
 {
-    char buffer[MAX_PATH];
-    GetModuleFileNameA(NULL, buffer, MAX_PATH);
-    std::string::size_type pos = std::string(buffer).find_last_of("\\/");
-    return std::string(buffer).substr(0, pos + 1);
+    TCHAR buffer[MAX_PATH];
+    GetModuleFileName(NULL, buffer, MAX_PATH);
+    std::wstring::size_type pos = std::wstring(buffer).find_last_of(L"\\/");
+    return std::wstring(buffer).substr(0, pos + 1);
 }
 
-static std::string GetExeName() 
+static std::wstring GetExeName() 
 {
-    char buffer[MAX_PATH];
-    GetModuleFileNameA(NULL, buffer, MAX_PATH);
-    std::string::size_type pos = std::string(buffer).find_last_of( "\\/" );
-    return std::string(buffer).substr(pos + 1, std::string(buffer).length() - pos);
+    TCHAR buffer[MAX_PATH];
+    GetModuleFileName(NULL, buffer, MAX_PATH);
+    std::wstring::size_type pos = std::wstring(buffer).find_last_of(L"\\/");
+    return std::wstring(buffer).substr(pos + 1, std::wstring(buffer).length() - pos);
 }
 
-/*
+
 static bool get_name(unsigned char* name, char dest[32])
 {
     struct in_addr destip;
@@ -89,4 +90,4 @@ static void ShowDataConnectionStats()
     GetTcpStatistics(stats);
     printf("Active Connections: %u\n", stats->dwActiveOpens);
     return;
-}*/
+}

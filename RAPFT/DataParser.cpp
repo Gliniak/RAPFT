@@ -5,7 +5,7 @@
 #include <conio.h>
 #include <dirent.h>
 
-DataParser::DataParser(std::string DataPath)
+DataParser::DataParser(std::wstring DataPath)
 {
     _songsAmount = 0;
     _SoundVector.clear();
@@ -21,19 +21,19 @@ DataParser::~DataParser()
 
 void DataParser::StartParsing()
 {
-    DIR* dir;
-    struct dirent *ent;
+    _WDIR* dir;
+    struct _wdirent *ent;
 
-    if ((dir = opendir (strcmp(PathName.c_str(), GetPath().c_str()) != 0 ? PathName.c_str() : GetPath().c_str())) != NULL) 
+    if ((dir = _wopendir (wcscmp(PathName.c_str(), GetPath().c_str()) != 0 ? PathName.c_str() : GetPath().c_str())) != NULL) 
     {
-        while ((ent = readdir (dir)) != NULL)
+        while ((ent = _wreaddir (dir)) != NULL)
         {
-            int pos = std::string(ent->d_name).find_last_of('.');
+            int pos = std::wstring(ent->d_name).find_last_of('.');
 
             if(pos == -1) // Only For Directories and Files Without dot
                 continue;
 
-            if(std::string(ent->d_name).substr(pos, ent->d_namlen - pos) != ".bps")
+            if(std::wstring(ent->d_name).substr(pos, ent->d_namlen - pos) != L".bps")
                 continue;
 
             std::ifstream _dataFile(ent->d_name);
@@ -50,7 +50,7 @@ void DataParser::StartParsing()
             }
 
             printf("!!!STARTED READING DATA!!!\r\n");
-            printf("Actual Reading File: %s\n\n", ent->d_name);
+            wprintf(L"Actual Reading File: %s\n\n", ent->d_name);
             short _linesAmount = 0;
             short _beepAmount = 0;
             std::string line;
@@ -116,7 +116,7 @@ void DataParser::StartParsing()
     if(_songsAmount == 0)
         printf("No Songs Data Founded! \n");
 
-    closedir (dir);
+    _wclosedir(dir);
     return;
 }
 

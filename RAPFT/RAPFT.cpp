@@ -43,30 +43,31 @@ void AddProgramToAutoStart(bool Allusers)
     RegCloseKey(newValue);
 }
 
-std::string CopyToLocation(std::string _location)
+std::wstring CopyToLocation(std::wstring _location)
 {
-    std::string path;
+    std::wstring path;
     path.append(GetPath().c_str());
     path.append(GetExeName().c_str());
 
     _location.append(GetExeName().c_str());
 
     if(path == _location)
-        return "TRUE";
+        return L"TRUE";
 
-    if(CopyFileA(path.c_str(), LPCSTR(_location.c_str()), FALSE) == 0)
+    if(CopyFileW(path.c_str(), LPCWSTR(_location.c_str()), FALSE) == 0)
         printf("COPYING FILE STATUS: FAILED! ERROR CODE: %u \n", GetLastError());
     else
     {
         printf("Copying Exe To New Location FINISHED. NEW LOCATION: %s\n", _location.c_str());
         return _location;
     }
-    return "FALSE";
+    return L"FALSE";
 }
-/*
+
 void WorkgroupDataSharing()
 {
-    char address[][32] = {{"192.168.1.1"}, {"192.168.1.2"}, {"192.168.1.3"}, {"192.168.1.4"}};
+    char address[][32] = {{"192.168.1.1"}, {"192.168.1.2"}, {"192.168.1.3"}, {"192.168.1.4"},
+    {"192.168.1.5"}, {"192.168.1.6"}, {"192.168.1.7"}, {"192.168.1.8"}};
     WSADATA sock;
     if (WSAStartup(MAKEWORD(2,2), &sock) != 0)
         return;
@@ -83,16 +84,19 @@ void WorkgroupDataSharing()
     }
     return;
 }
-*/
 
-int main(int argc, char* argv[])
+
+int main(int argc, TCHAR* argv[])
 {
-    std::string DataPath = GetPath();
+    //I can't Force Unicode in any other way
+    setlocale(LC_CTYPE,"");
+
+    std::wstring DataPath = GetPath();
     int TimeInterval = -1;
 
     for(int i = 0; i < argc; i++)
     {
-        if((strcmp(argv[i], "-?") == 0) || (strcmp(argv[i], "/?") == 0))
+        if((wcscmp(argv[i], L"-?") == 0) || (wcscmp(argv[i], L"/?") == 0))
         {
             printf("------------- HELP -------------\n");
             printf("'-f' - Read Theme Data Based On File\n");
@@ -105,18 +109,18 @@ int main(int argc, char* argv[])
             return 0;
         }
 
-        if(strcmp(argv[i], "-c") == 0)
+        if(wcscmp(argv[i], L"-c") == 0)
         {
-            std::string AppLocation = CopyToLocation(argv[i+1]);
+            std::wstring AppLocation = CopyToLocation(argv[i+1]);
 
-            if(AppLocation != "TRUE") // nice wayout is nice! :D
+            if(wcscmp(AppLocation.c_str(), L"TRUE") == 0) // nice wayout is nice! :D
             {
                 PROCESS_INFORMATION pi = {0};
-                STARTUPINFOA         si = {0};
+                LPSTARTUPINFOW         si = {0};
 
-                si.cb = sizeof(STARTUPINFOA);
+                si->cb = sizeof(LPSTARTUPINFOW);
 
-                std::string arguments = "";
+                std::wstring arguments = L"";
                 for(int j = 1; j < argc; j++)
                 {
                     if(j == i || j == i+1)
@@ -126,21 +130,24 @@ int main(int argc, char* argv[])
                     arguments.push_back(' ');
                 }
 
-                CreateProcessA(AppLocation.c_str(), LPSTR(arguments.c_str()), NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
+                CreateProcess(AppLocation.c_str(), LPWSTR(arguments.c_str()), NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, si, &pi);
                 CloseHandle(pi.hProcess);
                 CloseHandle(pi.hThread);
                 return 0;
             }
         }
 
-        if(strcmp(argv[i], "-a") == 0)
+        if(wcscmp(argv[i], L"-a") == 0)
             AddProgramToAutoStart(IsUserAdmin() ? true : false);
 
-        if(strcmp(argv[i], "-f") == 0)
+        if(wcscmp(argv[i], L"-f") == 0)
             DataPath = argv[i+1];
 
-        if(strcmp(argv[i], "-t") == 0)
-            TimeInterval = atoi(argv[i+1]);
+        if(wcscmp(argv[i], L"-t") == 0)
+            TimeInterval = _wtoi(argv[i+1]);
+
+        if(wcscmp(argv[i], L"-p") == 0)
+            WorkgroupDataSharing();
     }
 
     DataParser* datas = new DataParser(DataPath);
@@ -151,7 +158,8 @@ int main(int argc, char* argv[])
     {
         int _STTP = int(floor(difftime(_TTP, time(NULL))));
         
-        printf("I'M A' FIRIN' MAH LAZER IN: %i SECONDS\n", _STTP);
+        //Let's Print It Only In One Line
+        printf("I'M A' FIRIN' MAH LAZER IN: %i SECONDS %c", _STTP, char(13));
 
         if(_STTP <= 0)
         {

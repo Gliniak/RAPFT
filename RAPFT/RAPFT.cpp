@@ -64,29 +64,7 @@ std::wstring CopyToLocation(std::wstring _location)
     return L"FALSE";
 }
 
-void WorkgroupDataSharing()
-{
-    char address[][32] = {{"192.168.1.1"}, {"192.168.1.2"}, {"192.168.1.3"}, {"192.168.1.4"},
-    {"192.168.1.5"}, {"192.168.1.6"}, {"192.168.1.7"}, {"192.168.1.8"}};
-    WSADATA sock;
-    if (WSAStartup(MAKEWORD(2,2), &sock) != 0)
-        return;
-
-    for (int i = 0; i < (int)sizeof(address)/32; i++)
-    {
-        unsigned char mac[6] = {'\0'};
-        unsigned char name[100] = {'\0'};
-
-        if (get_mac(mac, address[i]))
-        {
-            printf("%s : %s : %.2X-%.2X-%.2X-%.2X-%.2X-%.2X\n", address[i], (get_name(name, address[i])) ? (char*)name : "-", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
-        }
-    }
-    return;
-}
-
-
-int main(int argc, TCHAR* argv[])
+int _tmain(int argc, TCHAR* argv[])
 {
     //I can't Force Unicode in any other way
     setlocale(LC_CTYPE,"");
@@ -147,7 +125,7 @@ int main(int argc, TCHAR* argv[])
             TimeInterval = _wtoi(argv[i+1]);
 
         if(wcscmp(argv[i], L"-p") == 0)
-            WorkgroupDataSharing();
+            ShowConnections();
     }
 
     DataParser* datas = new DataParser(DataPath);

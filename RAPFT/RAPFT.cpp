@@ -141,6 +141,9 @@ int _tmain(int argc, TCHAR* argv[])
 
         if(_STTP <= 0)
         {
+            if(datas->GetAmountOfSongs() == 0)
+                datas->StartParsing();
+
             datas->StartPlaying();
             _TTP = TimeInterval > 0 ? unsigned int(time(NULL) + TimeInterval) : CalculateTimeToHalfHour();
         }

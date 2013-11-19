@@ -7,16 +7,17 @@
 
 class DataParser
 {
-	public:
-		DataParser(std::wstring);
-		~DataParser();
+    public:
+        DataParser(std::wstring);
+        ~DataParser();
 
-		void StartParsing();
-		void StartPlaying();
+        void StartParsing();
+        void StartPlaying();
+        short GetAmountOfSongs() { return _songsAmount; }
 
-	private:
-		std::wstring PathName;
-		short _songsAmount;
-		std::vector<BeeperData*> _SoundVector;
+    private:
+        std::wstring PathName;
+        short _songsAmount;
+        std::vector<BeeperData*> _SoundVector;
 };
 

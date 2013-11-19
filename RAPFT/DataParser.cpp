@@ -36,7 +36,7 @@ void DataParser::StartParsing()
             if(std::wstring(ent->d_name).substr(pos, ent->d_namlen - pos) != L".bps")
                 continue;
 
-            std::ifstream _dataFile(ent->d_name);
+            std::wfstream _dataFile(ent->d_name);
             if(!_dataFile)
             {
                 printf("Can't load file %s - FILE DON'T EXIST! \n", ent->d_name);
@@ -53,8 +53,9 @@ void DataParser::StartParsing()
             wprintf(L"Actual Reading File: %s\n\n", ent->d_name);
             short _linesAmount = 0;
             short _beepAmount = 0;
-            std::string line;
-    
+            std::wstring line;
+            std::wstring title = L"MISSINGNAME";
+
             std::vector<short> freq;
             std::vector<short> mstime;
             std::vector<short> mstimeout;
@@ -62,23 +63,27 @@ void DataParser::StartParsing()
             while (std::getline(_dataFile , line))
             {
                 _linesAmount++;
-                if(line.empty())
+                if(line.empty() && _beepAmount == 0)
                     continue;
 
-                if(line.find("//") != -1)
+                if(line.find(L"//") != -1)
                     continue;
 
-                std::size_t found = line.find_first_not_of("1234567890,;#-");
+                std::size_t found = line.find_first_not_of(L"1234567890,;#-");
 
-                if(_beepAmount != 0 && line.find("#") != -1 || line.find("----") != -1)
+                if(_beepAmount != 0 && line.empty() || line.find(L"----") != -1)
                 {
-                    _SoundVector.push_back(new BeeperData(PathName.c_str(), freq, mstime, mstimeout, _beepAmount, _songsAmount));
+                    _SoundVector.push_back(new BeeperData(title, freq, mstime, mstimeout, _beepAmount, _songsAmount));
                     _songsAmount++;
                     _beepAmount = 0;
-                    if(line.find("----") != -1)
+                    title = L"";
+                    if(line.find(L"----") != -1)
                         break;
                     else continue;
                 }
+
+                if(line.find(L"# - ") != -1)
+                    title = line.substr(line.find_first_of(L"# - ")+4, line.length());
 
                 if (found!=std::string::npos)
                     continue;
@@ -99,12 +104,12 @@ void DataParser::StartParsing()
                         printf("CANT PARSE LINE %u WRONG AMOUNT OF DATA! \n", _linesAmount);
                         break;
                     }
-                    std::string number = line.substr(begin, pos-begin);
+                    std::wstring number = line.substr(begin, pos-begin);
                     begin = pos+1;
-                    data[itr++] = atoi(number.c_str());
+                    data[itr++] = _wtoi(number.c_str());
                     //Looking For Line End!
                     if((line.find_last_of(',') == pos) && (line.find_first_of(';') == line.size()-1))
-                        data[itr++] = atoi(line.substr(begin, line.size()-begin).c_str());
+                        data[itr++] = _wtoi(line.substr(begin, line.size()-begin).c_str());
                 }
                 freq.push_back(data[0]);
                 mstime.push_back(data[1]);
@@ -122,6 +127,9 @@ void DataParser::StartParsing()
 
 void DataParser::StartPlaying()
 {
+    if(_songsAmount <= 0)
+        return;
+
     short randedsong = rand()%_songsAmount;
     printf("Started Playing %i/%i\n", randedsong, _songsAmount);
     _SoundVector[0]->play();

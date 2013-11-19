@@ -26,7 +26,7 @@ void BeeperData::play()
 {
     for(unsigned int i = 0; i < _BeepsAmount; i++)
     {
-        printf("%i/%i - Playing Sound: %u Time: %i\n", i, _BeepsAmount, _freq[i], _mstime[i]);
+        printf("%i/%i - Playing Sound: %u Time: %i\n", i+1, _BeepsAmount, _freq[i], _mstime[i]);
         Beep(_freq[i], _mstime[i]);
         Sleep(_mstimeout[i]);
     }

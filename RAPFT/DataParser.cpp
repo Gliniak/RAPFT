@@ -76,7 +76,7 @@ void DataParser::StartParsing()
                     _SoundVector.push_back(new BeeperData(title, freq, mstime, mstimeout, _beepAmount, _songsAmount));
                     _songsAmount++;
                     _beepAmount = 0;
-                    title = L"";
+                    title = L"MISSINGNAME";
                     if(line.find(L"----") != -1)
                         break;
                     else continue;
@@ -131,6 +131,6 @@ void DataParser::StartPlaying()
         return;
 
     short randedsong = rand()%_songsAmount;
-    printf("Started Playing %i/%i\n", randedsong, _songsAmount);
+    printf("\nStarted Playing %i/%i\n", randedsong, _songsAmount);
     _SoundVector[0]->play();
 }

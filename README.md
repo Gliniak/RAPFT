@@ -23,7 +23,7 @@ Work Progress:
  - Secondary
    - AutoStart - 100%
    - Unicode Support - 100%
-   - I'm Feel Like A Ninja - 30%
+   - I Feel Like A Ninja - 30%
    - Allow To Create System Protected Process - 0%
    - Sharing via Local Workgroup & Autorun - 0% (Need To use Exploit?/Impossibru?)
 
